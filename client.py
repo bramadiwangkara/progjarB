@@ -1,6 +1,7 @@
 import socket
 import select
 import sys
+from cryptography.fernet import Fernet
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 if len(sys.argv) != 3:
@@ -8,6 +9,7 @@ if len(sys.argv) != 3:
     exit()
 IP_address = str(sys.argv[1])
 Port = int(sys.argv[2])
+nama = raw_input ("nama : ")
 server.connect((IP_address, Port))
 
 while True:
@@ -16,10 +18,12 @@ while True:
     for socks in read_sockets:
         if socks == server:
             message = socks.recv(2048)
+	    #f.decrypt(message)
             print message
         else:
             message = sys.stdin.readline()
-            server.send(message)
+	    message2 = "<"+ nama+"> " + message
+            server.send(message2)
             sys.stdout.write("<You>")
             sys.stdout.write(message)
             sys.stdout.flush()
